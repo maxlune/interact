@@ -9,7 +9,7 @@ export class CreateUser {
       return await this.userRepository.createUser(userData);
     } catch(error) {
       console.error("Erreur lors de la création de l'utilisateur:", error);
-      return null;
+      throw new Error("Impossible de créer l'utilisateur");
     }
   }
 }

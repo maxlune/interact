@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express, { Request, Response } from "express";
+import express, {NextFunction, Request, Response} from "express";
 import http from "http";
 import helmet from 'helmet'
 import cookieParser from "cookie-parser";
@@ -26,6 +26,11 @@ app.use(router);
 app.get("/", function (req: Request, res: Response) {
   res.send("Hello from backend");
 })
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).json({ error: err.message || "Une erreur est survenue" });
+});
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

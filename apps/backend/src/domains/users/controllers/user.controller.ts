@@ -12,9 +12,5 @@ export const getAllUsers: RequestHandler = async (req: Request, res: Response) =
 
 export const createUser: RequestHandler = async (req: Request, res: Response) => {
   const newUser = await createUserUseCase.createUser(req.body);
-  if (newUser) {
-    res.status(201).json(newUser);
-  } else {
-    res.status(400).json({ error: "Impossible de créer l'utilisateur" });
-  }
+  res.status(201).json(newUser);
 }
