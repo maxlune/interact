@@ -1,0 +1,19 @@
+{
+  "name": "interact",
+  "version": "1.0.0",
+  "homepage": "https://github.com/maxlune/interact#readme",
+  "bugs": {
+    "url": "https://github.com/maxlune/interact/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxlune/interact.git"
+  },
+  "license": "ISC",
+  "author": "maxlune",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
