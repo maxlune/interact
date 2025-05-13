@@ -1,8 +1,0 @@
-node_modules
-dist
-docs
-.env
-apps/backend/src/data/drizzle
-*.config.js
-*.config.ts
-tsconfig.json
