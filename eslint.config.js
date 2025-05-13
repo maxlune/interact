@@ -28,7 +28,6 @@ export default [
           varsIgnorePattern: '^_',
         },
       ],
-
       'import/newline-after-import': 'error',
       'import/order': [
         'error',
@@ -37,7 +36,6 @@ export default [
           'newlines-between': 'always',
         },
       ],
-
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       'curly': 'error',
       'eqeqeq': 'error',

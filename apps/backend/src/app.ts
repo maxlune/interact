@@ -1,14 +1,15 @@
-import dotenv from "dotenv";
-dotenv.config();
+import http from 'http';
 
-import express, {NextFunction, Request, Response} from "express";
-import http from "http";
-import helmet from 'helmet'
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import express, { Request, Response } from 'express';
+import helmet from 'helmet';
 
-import env from "./config/env";
-import router from "./routes";
+import env from './config/env';
+import router from './routes';
+
+dotenv.config();
 
 const { PORT } = env;
 
@@ -23,15 +24,15 @@ app.use(helmet());
 
 app.use(router);
 
-app.get("/", function (req: Request, res: Response) {
-  res.send("Hello from backend");
-})
+app.get('/', function (req: Request, res: Response) {
+  res.send('Hello from backend');
+});
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response) => {
   console.error(err.stack);
-  res.status(500).json({ error: err.message || "Une erreur est survenue" });
+  res.status(500).json({ error: err.message || 'Une erreur est survenue' });
 });
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-})
+});

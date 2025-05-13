@@ -1,4 +1,4 @@
-import { Response } from "express"
+import { Response } from 'express';
 
 export interface IError {
   field: string;
@@ -14,6 +14,6 @@ interface INormalized {
 export const response = (res: Response, normalized: INormalized): Response => {
   return res.status(normalized.statusCode).json({
     message: normalized.message,
-    data: normalized.data
+    data: normalized.data,
   });
-}
+};
