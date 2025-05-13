@@ -11,9 +11,25 @@
   },
   "license": "ISC",
   "author": "maxlune",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint \"apps/**/src/**/*.ts\" --ext .ts",
+    "lint:fix": "eslint \"apps/**/src/**/*.ts\" --ext .ts --fix",
+    "format": "prettier --write \"apps/**/*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"apps/**/*.{ts,tsx,json,md}\"",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.26.0",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "typescript-eslint": "^8.32.1"
   }
 }
