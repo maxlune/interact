@@ -6,7 +6,9 @@
   "scripts": {
     "watch": "tsc --watch",
     "dev": "nodemon src/app.ts --exec \"ts-node --transpile-only\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui",
     "generate": "drizzle-kit generate --config=src/config/drizzle.config.ts",
     "migrate": "tsx -r dotenv/config src/data/migrate.ts",
     "studio": "drizzle-kit studio --config=src/config/drizzle.config.ts"
@@ -31,8 +33,10 @@
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.17",
     "@types/pg": "^8.15.1",
+    "@types/supertest": "^6.0.3",
     "drizzle-kit": "^0.31.1",
     "nodemon": "^3.1.10",
+    "supertest": "^7.1.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.19.4",
