@@ -1,0 +1,59 @@
+version: "3"
+services:
+  database:
+    container_name: interact-database
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - interact-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    container_name: interact-migrate
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./apps/backend:/usr/interact-backend
+      - /usr/interact-backend/node_modules
+    depends_on:
+      database:
+        condition: service_healthy
+    command: [ "sh", "-c", "npm run generate && npm run migrate" ]
+    restart: "no"
+
+  backend:
+    container_name: interact-backend
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=${PORT_BACKEND}
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./apps/backend:/usr/interact-backend
+      - /usr/interact-backend/node_modules
+#    depends_on:
+#      database:
+#        condition: service_healthy
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    command: ["npm", "run", "dev"]
+
+volumes:
+  interact-db-data:
