@@ -1,11 +1,12 @@
-import { NodePgDatabase, drizzle } from 'drizzle-orm/node-postgres';
+import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
+// TODO Ici env.test pour les tests dans un nouveau fichier
 import env from '../config/env';
 
-const { DATABASE_URL } = env;
-
 import * as schema from './schema';
+
+const { DATABASE_URL } = env;
 
 export const pool = new Pool({
   connectionString: DATABASE_URL,

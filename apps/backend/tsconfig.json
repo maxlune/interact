@@ -12,6 +12,7 @@
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts"],
   "typedocOptions": {
     "entryPoints": ["src/**/*.ts"],
     "out": "docs"

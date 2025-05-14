@@ -9,6 +9,9 @@ const env: EnvConfig = {
     process.env.DATABASE_URL ||
     // TODO : Change username, password and port
     'postgres://maximilien:admin@localhost:5432/interact-db',
+  TEST_DATABASE_URL:
+    process.env.TEST_DATABASE_URL ||
+    'postgresql://test:test@localhost:5433/interact_test',
 };
 
 export default env;
