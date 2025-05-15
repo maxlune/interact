@@ -5,6 +5,8 @@ const env: EnvConfig = {
   NODE_ENV:
     (process.env.NODE_ENV as 'development' | 'test' | 'production') ||
     'development',
+  JWT_SECRET: process.env.JWT_SECRET || 'JWT_SECRET:!',
+  REFRESH_SECRET: process.env.REFRESH_SECRET || 'REFRESH_SECRET§:!',
   DATABASE_URL:
     process.env.DATABASE_URL ||
     // TODO : Change username, password and port
