@@ -53,9 +53,10 @@ export class UserRepository {
     }
   }
 
-  createUser(user: NewUser) {
+  async createUser(user: NewUser) {
     try {
-      return db.insert(users).values(user).execute();
+      const [newUser] = await db.insert(users).values(user).returning();
+      return newUser;
     } catch (err) {
       console.error(err);
       throw new Error("Impossible de créer l'utilisateur");
