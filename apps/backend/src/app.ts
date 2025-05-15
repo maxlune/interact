@@ -7,6 +7,9 @@ import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 
 import env from './config/env';
+import { errorHandler } from './infrastructure/middleware/errorHandler';
+import { refreshTokenMiddleware } from './infrastructure/middleware/refreshToken';
+import { requestLogger } from './infrastructure/middleware/requestLogger';
 import router from './routes';
 
 dotenv.config();
@@ -22,16 +25,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
 
+app.use(requestLogger);
+app.use(refreshTokenMiddleware);
+
 app.use(router);
 
 app.get('/', function (req: Request, res: Response) {
   res.send('Hello from backend');
 });
 
-app.use((err: Error, req: Request, res: Response) => {
-  console.error(err.stack);
-  res.status(500).json({ error: err.message || 'Une erreur est survenue' });
-});
+// app.use((err: Error, req: Request, res: Response) => {
+//   console.error(err.stack);
+//   res.status(500).json({ error: err.message || 'Une erreur est survenue' });
+// });
+
+app.use(errorHandler);
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
