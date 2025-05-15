@@ -1,14 +1,17 @@
 import { Request, RequestHandler, Response } from 'express';
 
 import env from '../../../config/env';
+import { CustomRequest } from '../../../types/express';
 import { response } from '../../../utils/response';
 import { Login } from '../use-cases/login';
+import { Me } from '../use-cases/me';
 import { Register } from '../use-cases/register';
 
 const { NODE_ENV } = env;
 
 const loginUseCase = new Login();
 const registerUseCase = new Register();
+const meUseCase = new Me();
 
 export const login: RequestHandler = async (req: Request, res: Response) => {
   try {
@@ -109,5 +112,18 @@ export const logout = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     response(res, { statusCode: 500, message: 'Internal server error' });
+  }
+};
+
+export const me: RequestHandler = async (req: CustomRequest, res: Response) => {
+  try {
+    const result = await meUseCase.execute(req.user.userId);
+    response(res, { statusCode: 200, message: 'OK', data: result });
+  } catch (error) {
+    console.error(error);
+    response(res, {
+      statusCode: 500,
+      message: 'Internal server error',
+    });
   }
 };
