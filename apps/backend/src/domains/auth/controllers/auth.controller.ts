@@ -29,11 +29,8 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
 
     res.cookie('accessToken', result.tokens.accessToken, {
       httpOnly: true,
-      // TODO change this after test
-      secure: false,
-      sameSite: 'lax',
-      // secure: NODE_ENV === 'production',
-      // sameSite: 'strict',
+      secure: NODE_ENV === 'production',
+      sameSite: 'strict',
       maxAge: 15 * 60 * 1000,
     });
 
