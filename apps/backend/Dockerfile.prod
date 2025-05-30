@@ -9,7 +9,7 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+RUN npx tsc --project tsconfig.prod.json
 
 # Stage de production
 FROM node:18-alpine AS production
