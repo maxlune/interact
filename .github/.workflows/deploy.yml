@@ -1,0 +1,164 @@
+#name: Deploy to VPS
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#jobs:
+#  lint:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Install root dependencies
+#        run: npm install
+#
+#      - name: Run linting
+#        run: npm run lint
+#
+#  test:
+#    needs: lint
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Install backend dependencies
+#        run: |
+#          cd apps/backend
+#          npm install
+#
+#      - name: Run backend tests
+#        run: |
+#          cd apps/backend
+#          npm run test
+#
+#  deploy:
+#    needs: test
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Create .env file
+#        run: |
+#          cat > .env << EOF
+#          PORT=8080
+#          NODE_ENV=production
+#          JWT_SECRET=${{ secrets.JWT_SECRET }}
+#          REFRESH_SECRET=${{ secrets.REFRESH_SECRET }}
+#          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+#          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+#          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+#          DATABASE_URL=${{ secrets.DATABASE_URL }}
+#          EOF
+#
+#      - name: Deploy with Docker
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.VPS_DEPLOY_PRIVATE_KEY }}
+#        run: |
+#          # Configurer SSH
+#          mkdir -p ~/.ssh
+#          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+#          chmod 600 ~/.ssh/id_rsa
+#          ssh-keyscan -H ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
+#
+#          # Synchroniser les fichiers
+#          rsync -avz --delete --exclude 'node_modules' ./ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/interact/
+#
+#          # Copier le fichier .env
+#          scp .env ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/interact/
+#
+#          # Construire et démarrer les conteneurs Docker sur le VPS
+#          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} '
+#          cd ~/interact &&
+#          docker compose down || true &&
+#          docker compose up --build -d
+#          '
+
+name: CI/CD Pipeline
+on:
+  push:
+    branches:
+      - dev    # CI seulement
+      - main   # CI + Déploiement
+  pull_request:
+    branches:
+      - dev    # CI seulement
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install backend dependencies
+        run: |
+          cd apps/backend
+          npm install
+
+      - name: Run backend tests
+        run: |
+          cd apps/backend
+          npm run test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          PORT=8080
+          NODE_ENV=production
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          REFRESH_SECRET=${{ secrets.REFRESH_SECRET }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          EOF
+
+      - name: Deploy with Docker
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VPS_DEPLOY_PRIVATE_KEY }}
+        run: |
+          # Configurer SSH
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
+          
+          # Synchroniser les fichiers
+          rsync -avz --delete --exclude 'node_modules' ./ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/interact/
+          
+          # Copier le .env
+          scp .env ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:~/interact/
+          
+          # Build et start avec le compose de prod
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} '
+          cd ~/interact &&
+          docker compose -f docker-compose.prod.yml down || true &&
+          docker compose -f docker-compose.prod.yml build --no-cache &&
+          docker compose -f docker-compose.prod.yml up -d
+          '

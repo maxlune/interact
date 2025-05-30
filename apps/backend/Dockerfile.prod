@@ -1,0 +1,31 @@
+# Multi-stage build pour TypeScript
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+# Stage de production
+FROM node:18-alpine AS production
+
+WORKDIR /usr/interact-backend
+
+COPY package*.json ./
+
+RUN npm ci && npm cache clean --force
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/src ./src
+
+# Copier les autres fichiers si nécessaires
+# COPY --from=builder /app/public ./public
+
+EXPOSE 8080
+
+CMD ["npm", "start"]
