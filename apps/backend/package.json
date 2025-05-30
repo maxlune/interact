@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
     "watch": "tsc --watch",
     "dev": "nodemon src/app.ts --exec \"ts-node --transpile-only\"",
     "test": "vitest",

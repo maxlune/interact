@@ -82,11 +82,12 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - dev    # CI seulement
-      - main   # CI + Déploiement
+      - dev    # CI only
+      - main   # CI + Deploy
+      - deployment  # Temp
   pull_request:
     branches:
-      - dev    # CI seulement
+      - dev    # CI only
 
 jobs:
   lint:
@@ -121,7 +122,8 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/deployment'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
