@@ -6,6 +6,7 @@ import { response } from '../../../utils/response';
 import { Login } from '../use-cases/login';
 import { Me } from '../use-cases/me';
 import { Register } from '../use-cases/register';
+import { AuthService } from '../services/auth.service';
 
 const { NODE_ENV } = env;
 
@@ -22,11 +23,15 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
       secure: NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
     res.cookie('accessToken', result.tokens.accessToken, {
       httpOnly: true,
       secure: NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000
     });
 
     response(res, {
@@ -106,6 +111,9 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
+    const authService = new AuthService();
+    await authService.invalidateRefreshToken(req.user.userId);
+    
     res.clearCookie('accessToken');
     res.clearCookie('refreshToken');
     response(res, { statusCode: 200, message: 'Logout successful' });

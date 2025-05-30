@@ -22,7 +22,6 @@ export const isAuthenticated = (
     const { userId, name } = decoded as jwt.JwtPayload;
 
     req.user = { userId, name };
-    console.table(decoded);
 
     next();
   } catch {

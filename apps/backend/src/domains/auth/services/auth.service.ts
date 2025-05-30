@@ -7,7 +7,6 @@ import { User } from '../../users/entities/user.entity';
 const { REFRESH_SECRET, JWT_SECRET } = env;
 
 export class AuthService {
-  private refreshTokenStore: Map<string, string> = new Map();
   private UserRepository = new UserRepository();
 
   issueAccessToken(id: string): string {
@@ -23,7 +22,7 @@ export class AuthService {
       refreshToken: true,
     });
     if (user) {
-      this.UserRepository.updateUser({
+      await this.UserRepository.updateUser({
         ...user,
         refreshToken: refreshToken,
       } as User);
@@ -47,15 +46,9 @@ export class AuthService {
         return this.issueAccessToken(payload.userId);
       }
 
-      const storedRefreshToken = this.refreshTokenStore.get(payload.userId);
-
-      if (storedRefreshToken === refreshToken) {
-        const newAccessToken = this.issueAccessToken(payload.userId);
-        return newAccessToken;
-      }
       if (user) {
         user.refreshToken = '';
-        this.UserRepository.updateUser(user as User);
+        await this.UserRepository.updateUser(user as User);
       }
 
       throw new Error('Invalid refresh token');
@@ -63,6 +56,18 @@ export class AuthService {
       console.error(err);
 
       throw new Error('Invalid refresh token');
+    }
+  }
+
+  async invalidateRefreshToken(userId: string): Promise<void> {
+    const user = await this.UserRepository.getUserById(userId, {
+      id: true,
+      refreshToken: true,
+    });
+
+    if (user) {
+      user.refreshToken = '';
+      await this.UserRepository.updateUser(user as User);
     }
   }
 }
