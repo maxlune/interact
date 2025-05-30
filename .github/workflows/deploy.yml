@@ -117,6 +117,15 @@ jobs:
           cd apps/backend
           npm install
 
+      - name: Start test database
+        run: |
+          touch .env
+          docker compose up test-database -d
+
+      - name: Wait for database to be ready
+        run: |
+          timeout 60 bash -c 'until docker compose ps test-database | grep "healthy"; do sleep 2; done'
+
       - name: Run tests
         run: npm run test
 
