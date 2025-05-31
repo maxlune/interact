@@ -19,7 +19,7 @@ export class UserRepository {
       });
     } catch (err) {
       console.error(err);
-      throw new Error('Impossible de récupérer les utilisateurs');
+      throw new Error('Failed to retrieve users');
     }
   }
 
@@ -34,7 +34,7 @@ export class UserRepository {
       });
     } catch (err) {
       console.error(err);
-      throw new Error("Impossible de récupérer l'utilisateur");
+      throw new Error('Failed to retrieve user');
     }
   }
 
@@ -49,7 +49,7 @@ export class UserRepository {
       });
     } catch (err) {
       console.error(err);
-      throw new Error("Impossible de récupérer l'utilisateur");
+      throw new Error('Failed to retrieve user');
     }
   }
 
@@ -59,7 +59,7 @@ export class UserRepository {
       return newUser;
     } catch (err) {
       console.error(err);
-      throw new Error("Impossible de créer l'utilisateur");
+      throw new Error('Failed to create user');
     }
   }
 
@@ -68,7 +68,7 @@ export class UserRepository {
       return db.update(users).set(user).where(eq(users.id, user.id)).execute();
     } catch (err) {
       console.error(err);
-      throw new Error("Impossible de mettre à jour l'utilisateur");
+      throw new Error('Failed to update user');
     }
   }
 }

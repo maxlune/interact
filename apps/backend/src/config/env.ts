@@ -1,16 +1,21 @@
 import { EnvConfig } from '../types/env.config';
 
+if (process.env.NODE_ENV === 'production') {
+  if (!process.env.JWT_SECRET || !process.env.REFRESH_SECRET) {
+    throw new Error('JWT_SECRET and REFRESH_SECRET are required in production');
+  }
+}
+
 const env: EnvConfig = {
   PORT: parseInt(process.env.PORT || '8080'),
   NODE_ENV:
     (process.env.NODE_ENV as 'development' | 'test' | 'production') ||
     'development',
-  JWT_SECRET: process.env.JWT_SECRET || 'JWT_SECRET:!',
-  REFRESH_SECRET: process.env.REFRESH_SECRET || 'REFRESH_SECRET§:!',
+  JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret',
+  REFRESH_SECRET: process.env.REFRESH_SECRET || 'dev-refresh-secret',
   DATABASE_URL:
     process.env.DATABASE_URL ||
-    // TODO : Change username, password and port
-    'postgres://maximilien:admin@localhost:5432/interact-db',
+    'postgres://postgres:admin@localhost:5432/interact-db',
   TEST_DATABASE_URL:
     process.env.TEST_DATABASE_URL ||
     'postgresql://test:test@localhost:5433/interact_test',
