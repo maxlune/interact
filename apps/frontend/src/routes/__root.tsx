@@ -1,15 +1,11 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { Navbar } from '../components/organisms/Navbar.tsx';
 
 const RootComponent = () => {
   return (
     <>
-      <div>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/form">Form</Link>
-        <Link to="/login">Login</Link>
-      </div>
+      <Navbar />
       <Outlet />
       {process.env.NODE_ENV !== 'production' && <TanStackRouterDevtools />}
     </>
