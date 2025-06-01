@@ -1,8 +1,7 @@
 import { useForm } from '@tanstack/react-form';
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
 import { z } from 'zod';
-import { AuthService } from '../api/auth/auth.service.ts';
+import { useLogin } from '../hooks/useLogin';
 
 const loginSchema = z.object({
   username: z
@@ -20,9 +19,7 @@ export const Route = createFileRoute('/login')({
 });
 
 function LoginPage() {
-  const [success, setSuccess] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const loginMutation = useLogin();
 
   const form = useForm({
     defaultValues: {
@@ -30,24 +27,16 @@ function LoginPage() {
       password: '',
     },
     onSubmit: async ({ value }) => {
-      setLoading(true);
-      setError('');
-      setSuccess('');
-
-      try {
-        const result = await AuthService.login(value);
-
-        setSuccess(
-          `Connexion réussie ! Bienvenue ${result.data?.name || value.username}`,
-        );
-
-        // Ici rediriger l'utilisateur
-      } catch (err) {
-        console.error('Erreur:', err);
-        setError(err instanceof Error ? err.message : 'Erreur de connexion');
-      } finally {
-        setLoading(false);
-      }
+      loginMutation.mutate(value, {
+        onSuccess: (data) => {
+          console.log('Connexion réussie :', data);
+          // TODO: Sauvegarder l'utilisateur dans un store
+          // TODO: Rediriger vers la page d'accueil
+        },
+        onError: (error) => {
+          console.error('Erreur de connexion :', error);
+        },
+      });
     },
     validators: {
       onChange: loginSchema,
@@ -72,7 +61,7 @@ function LoginPage() {
                 type="text"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                disabled={loading}
+                disabled={loginMutation.isPending}
               />
               {field.state.meta.errors && (
                 <p style={{ color: 'red', fontSize: '14px' }}>
@@ -93,7 +82,7 @@ function LoginPage() {
                 type="password"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
-                disabled={loading}
+                disabled={loginMutation.isPending}
               />
               {field.state.meta.errors && (
                 <p style={{ color: 'red', fontSize: '14px' }}>
@@ -106,45 +95,36 @@ function LoginPage() {
           )}
         </form.Field>
 
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-        >
+        <form.Subscribe selector={(state) => [state.canSubmit]}>
           {([canSubmit]) => (
             <button
               type="submit"
-              disabled={!canSubmit || loading}
+              disabled={!canSubmit || loginMutation.isPending}
               style={{
                 padding: '10px 20px',
-                backgroundColor: !canSubmit || loading ? '#458186' : '#000000',
+                backgroundColor:
+                  !canSubmit || loginMutation.isPending ? '#7b7b7b' : '#000000',
                 color: 'white',
                 border: 'none',
-                cursor: !canSubmit || loading ? 'not-allowed' : 'pointer',
+                cursor:
+                  !canSubmit || loginMutation.isPending
+                    ? 'not-allowed'
+                    : 'pointer',
               }}
             >
-              {loading ? 'Connexion...' : 'Se connecter'}
+              {loginMutation.isPending ? 'Connexion...' : 'Se connecter'}
             </button>
           )}
         </form.Subscribe>
       </form>
 
-      {/* Messages de succès/erreur */}
-      {success && (
-        <div
-          style={{
-            color: '#039824',
-          }}
-        >
-          {success}
-        </div>
+      {loginMutation.isSuccess && (
+        <div style={{ color: '#039824' }}>Connexion réussie !</div>
       )}
 
-      {error && (
-        <div
-          style={{
-            color: '#b41626',
-          }}
-        >
-          {error}
+      {loginMutation.isError && (
+        <div style={{ color: '#b41626' }}>
+          {loginMutation.error?.message || 'Erreur de connexion'}
         </div>
       )}
     </div>
