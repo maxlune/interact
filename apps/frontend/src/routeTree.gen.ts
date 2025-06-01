@@ -14,8 +14,15 @@ import { Route as rootRoute } from './routes/__root';
 import { Route as AboutImport } from './routes/about';
 import { Route as FormImport } from './routes/form';
 import { Route as IndexImport } from './routes/index';
+import { Route as LoginImport } from './routes/login';
 
 // Create/Update Routes
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any);
 
 const FormRoute = FormImport.update({
   id: '/form',
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormImport;
       parentRoute: typeof rootRoute;
     };
+    '/login': {
+      id: '/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -69,12 +83,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
   '/form': typeof FormRoute;
+  '/login': typeof LoginRoute;
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
   '/form': typeof FormRoute;
+  '/login': typeof LoginRoute;
 }
 
 export interface FileRoutesById {
@@ -82,14 +98,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
   '/form': typeof FormRoute;
+  '/login': typeof LoginRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/about' | '/form';
+  fullPaths: '/' | '/about' | '/form' | '/login';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/about' | '/form';
-  id: '__root__' | '/' | '/about' | '/form';
+  to: '/' | '/about' | '/form' | '/login';
+  id: '__root__' | '/' | '/about' | '/form' | '/login';
   fileRoutesById: FileRoutesById;
 }
 
@@ -97,12 +114,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   AboutRoute: typeof AboutRoute;
   FormRoute: typeof FormRoute;
+  LoginRoute: typeof LoginRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   FormRoute: FormRoute,
+  LoginRoute: LoginRoute,
 };
 
 export const routeTree = rootRoute
@@ -117,7 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/form"
+        "/form",
+        "/login"
       ]
     },
     "/": {
@@ -128,6 +148,9 @@ export const routeTree = rootRoute
     },
     "/form": {
       "filePath": "form.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
     }
   }
 }
