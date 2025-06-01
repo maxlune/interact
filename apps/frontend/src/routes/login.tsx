@@ -2,6 +2,7 @@ import { useForm } from '@tanstack/react-form';
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 import { useLogin } from '../hooks/useLogin';
+import { useAuthStore } from '../stores/authStore';
 
 const loginSchema = z.object({
   username: z
@@ -20,6 +21,7 @@ export const Route = createFileRoute('/login')({
 
 function LoginPage() {
   const loginMutation = useLogin();
+  const { setUser, toggleAuth } = useAuthStore();
 
   const form = useForm({
     defaultValues: {
@@ -30,7 +32,13 @@ function LoginPage() {
       loginMutation.mutate(value, {
         onSuccess: (data) => {
           console.log('Connexion réussie :', data);
-          // TODO: Sauvegarder l'utilisateur dans un store
+          if (data.data) {
+            setUser({
+              id: data.data.userId,
+              username: data.data.name,
+            });
+            toggleAuth(true);
+          }
           // TODO: Rediriger vers la page d'accueil
         },
         onError: (error) => {
