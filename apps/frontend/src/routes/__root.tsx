@@ -7,6 +7,7 @@ const RootComponent = () => {
       <div>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
+        <Link to="/form">Form</Link>
       </div>
       <Outlet />
       {process.env.NODE_ENV !== 'production' && <TanStackRouterDevtools />}
