@@ -58,7 +58,7 @@ export const LoginPage = () => {
       >
         <form.Field name="username">
           {(field) => (
-            <div style={{ marginBottom: '15px' }}>
+            <div className="mb-4">
               <label>Nom d'utilisateur : </label>
               <input
                 type="text"
@@ -67,7 +67,7 @@ export const LoginPage = () => {
                 disabled={loginMutation.isPending}
               />
               {field.state.meta.errors && (
-                <p style={{ color: 'red', fontSize: '14px' }}>
+                <p className="text-red-500 text-sm">
                   {field.state.meta.errors
                     .map((err) => err?.message)
                     .join(', ')}
@@ -79,7 +79,7 @@ export const LoginPage = () => {
 
         <form.Field name="password">
           {(field) => (
-            <div style={{ marginBottom: '15px' }}>
+            <div className="mb-4">
               <label>Mot de passe : </label>
               <input
                 type="password"
@@ -88,7 +88,7 @@ export const LoginPage = () => {
                 disabled={loginMutation.isPending}
               />
               {field.state.meta.errors && (
-                <p style={{ color: 'red', fontSize: '14px' }}>
+                <p className="text-red-500 text-sm">
                   {field.state.meta.errors
                     .map((err) => err?.message)
                     .join(', ')}
@@ -103,17 +103,11 @@ export const LoginPage = () => {
             <button
               type="submit"
               disabled={!canSubmit || loginMutation.isPending}
-              style={{
-                padding: '10px 20px',
-                backgroundColor:
-                  !canSubmit || loginMutation.isPending ? '#7b7b7b' : '#000000',
-                color: 'white',
-                border: 'none',
-                cursor:
-                  !canSubmit || loginMutation.isPending
-                    ? 'not-allowed'
-                    : 'pointer',
-              }}
+              className={`py-2.5 px-5 text-white border-none ${
+                !canSubmit || loginMutation.isPending
+                  ? 'bg-neutral-500 cursor-not-allowed'
+                  : 'bg-black cursor-pointer'
+              }`}
             >
               {loginMutation.isPending ? 'Connexion...' : 'Se connecter'}
             </button>
@@ -122,11 +116,11 @@ export const LoginPage = () => {
       </form>
 
       {loginMutation.isSuccess && (
-        <div style={{ color: '#039824' }}>Connexion réussie !</div>
+        <div className="text-green-600">Connexion réussie !</div>
       )}
 
       {loginMutation.isError && (
-        <div style={{ color: '#b41626' }}>
+        <div className="text-red-600">
           {loginMutation.error?.message || 'Erreur de connexion'}
         </div>
       )}

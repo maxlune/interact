@@ -17,35 +17,22 @@ export const Navbar = () => {
   };
 
   return (
-    <nav
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '10px 20px',
-        backgroundColor: '#000',
-        color: 'white',
-        borderBottom: '1px solid #333',
-      }}
-    >
+    <nav className="flex justify-between items-center py-2.5 px-5 bg-black text-white border-b border-gray-700">
       {/* Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <Link
-          to="/"
-          style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-        >
+      <div className="flex items-center gap-5">
+        <Link to="/" className="text-white no-underline font-bold">
           InterAct
         </Link>
 
-        <div style={{ display: 'flex', gap: '20px', paddingRight: '20px' }}>
-          <Link to="/about" style={{ color: 'white', textDecoration: 'none' }}>
+        <div className="flex gap-5 pr-5">
+          <Link to="/about" className="text-white no-underline">
             À propos
           </Link>
         </div>
       </div>
 
       {/* Auth section */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="flex items-center gap-2.5">
         {isAuthenticated ? (
           <>
             <span>
@@ -54,29 +41,20 @@ export const Navbar = () => {
             <button
               onClick={handleLogout}
               disabled={logoutMutation.isPending}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: logoutMutation.isPending ? '#999' : '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: logoutMutation.isPending ? 'not-allowed' : 'pointer',
-              }}
+              className={`py-2 px-4 text-white border-none rounded ${
+                logoutMutation.isPending
+                  ? 'bg-gray-500 cursor-not-allowed'
+                  : 'bg-red-600 cursor-pointer'
+              }`}
             >
               {logoutMutation.isPending ? 'Déconnexion...' : 'Se déconnecter'}
             </button>
           </>
         ) : (
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div className="flex gap-2.5">
             <Link
               to="/login"
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                textDecoration: 'none',
-                borderRadius: '4px',
-              }}
+              className="py-2 px-4 bg-blue-600 !text-white no-underline rounded"
             >
               Se connecter
             </Link>
