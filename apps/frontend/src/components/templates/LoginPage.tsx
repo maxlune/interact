@@ -26,7 +26,6 @@ export const LoginPage = () => {
     onSubmit: async ({ value }) => {
       loginMutation.mutate(value, {
         onSuccess: (data) => {
-          console.log('Connexion réussie :', data);
           if (data.data) {
             setUser({
               id: data.data.userId,
