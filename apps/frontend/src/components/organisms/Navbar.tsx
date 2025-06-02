@@ -38,6 +38,7 @@ export const Navbar = () => {
             <span>
               Bonjour <strong>{user?.username}</strong>
             </span>
+            <Link to="/profil">Mon profil</Link>
             <button
               onClick={handleLogout}
               disabled={logoutMutation.isPending}
