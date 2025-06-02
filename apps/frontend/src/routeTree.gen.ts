@@ -15,8 +15,15 @@ import { Route as AboutImport } from './routes/about';
 import { Route as IndexImport } from './routes/index';
 import { Route as LoginImport } from './routes/login';
 import { Route as ProfilImport } from './routes/profil';
+import { Route as RegisterImport } from './routes/register';
 
 // Create/Update Routes
+
+const RegisterRoute = RegisterImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any);
 
 const ProfilRoute = ProfilImport.update({
   id: '/profil',
@@ -74,6 +81,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfilImport;
       parentRoute: typeof rootRoute;
     };
+    '/register': {
+      id: '/register';
+      path: '/register';
+      fullPath: '/register';
+      preLoaderRoute: typeof RegisterImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -84,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute;
   '/login': typeof LoginRoute;
   '/profil': typeof ProfilRoute;
+  '/register': typeof RegisterRoute;
 }
 
 export interface FileRoutesByTo {
@@ -91,6 +106,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute;
   '/login': typeof LoginRoute;
   '/profil': typeof ProfilRoute;
+  '/register': typeof RegisterRoute;
 }
 
 export interface FileRoutesById {
@@ -99,14 +115,15 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute;
   '/login': typeof LoginRoute;
   '/profil': typeof ProfilRoute;
+  '/register': typeof RegisterRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/about' | '/login' | '/profil';
+  fullPaths: '/' | '/about' | '/login' | '/profil' | '/register';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/about' | '/login' | '/profil';
-  id: '__root__' | '/' | '/about' | '/login' | '/profil';
+  to: '/' | '/about' | '/login' | '/profil' | '/register';
+  id: '__root__' | '/' | '/about' | '/login' | '/profil' | '/register';
   fileRoutesById: FileRoutesById;
 }
 
@@ -115,6 +132,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute;
   LoginRoute: typeof LoginRoute;
   ProfilRoute: typeof ProfilRoute;
+  RegisterRoute: typeof RegisterRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -122,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
   ProfilRoute: ProfilRoute,
+  RegisterRoute: RegisterRoute,
 };
 
 export const routeTree = rootRoute
@@ -137,7 +156,8 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/login",
-        "/profil"
+        "/profil",
+        "/register"
       ]
     },
     "/": {
@@ -151,6 +171,9 @@ export const routeTree = rootRoute
     },
     "/profil": {
       "filePath": "profil.tsx"
+    },
+    "/register": {
+      "filePath": "register.tsx"
     }
   }
 }

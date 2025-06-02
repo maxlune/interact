@@ -59,6 +59,12 @@ export const Navbar = () => {
             >
               Se connecter
             </Link>
+            <Link
+              to="/register"
+              className="py-2 px-4 bg-blue-600 !text-white no-underline rounded"
+            >
+              S'inscrire
+            </Link>
           </div>
         )}
       </div>

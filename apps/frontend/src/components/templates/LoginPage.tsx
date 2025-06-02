@@ -1,4 +1,5 @@
 import { useForm } from '@tanstack/react-form';
+import { useNavigate } from '@tanstack/react-router';
 import { z } from 'zod';
 import { useLogin } from '../../hooks/useLogin.ts';
 import { useAuthStore } from '../../stores/authStore.ts';
@@ -16,6 +17,7 @@ const loginSchema = z.object({
 
 export const LoginPage = () => {
   const loginMutation = useLogin();
+  const navigate = useNavigate();
   const { setUser, toggleAuth } = useAuthStore();
 
   const form = useForm({
@@ -33,7 +35,7 @@ export const LoginPage = () => {
             });
             toggleAuth(true);
           }
-          // TODO: Rediriger vers la page d'accueil
+          navigate({ to: '/' });
         },
         onError: (error) => {
           console.error('Erreur de connexion :', error);
