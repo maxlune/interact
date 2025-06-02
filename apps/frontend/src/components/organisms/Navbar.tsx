@@ -28,7 +28,7 @@ export const Navbar = () => {
         borderBottom: '1px solid #333',
       }}
     >
-      {/* navigation */}
+      {/* Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <Link
           to="/"
@@ -37,19 +37,9 @@ export const Navbar = () => {
           InterAct
         </Link>
 
-        <div style={{ display: 'flex', gap: '20px' }}>
+        <div style={{ display: 'flex', gap: '20px', paddingRight: '20px' }}>
           <Link to="/about" style={{ color: 'white', textDecoration: 'none' }}>
             À propos
-          </Link>
-          <Link
-            to="/form"
-            style={{
-              color: 'white',
-              textDecoration: 'none',
-              paddingRight: '10px',
-            }}
-          >
-            Form
           </Link>
         </div>
       </div>

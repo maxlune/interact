@@ -12,7 +12,6 @@
 
 import { Route as rootRoute } from './routes/__root';
 import { Route as AboutImport } from './routes/about';
-import { Route as FormImport } from './routes/form';
 import { Route as IndexImport } from './routes/index';
 import { Route as LoginImport } from './routes/login';
 
@@ -21,12 +20,6 @@ import { Route as LoginImport } from './routes/login';
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any);
-
-const FormRoute = FormImport.update({
-  id: '/form',
-  path: '/form',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -60,13 +53,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport;
       parentRoute: typeof rootRoute;
     };
-    '/form': {
-      id: '/form';
-      path: '/form';
-      fullPath: '/form';
-      preLoaderRoute: typeof FormImport;
-      parentRoute: typeof rootRoute;
-    };
     '/login': {
       id: '/login';
       path: '/login';
@@ -82,14 +68,12 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
-  '/form': typeof FormRoute;
   '/login': typeof LoginRoute;
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
-  '/form': typeof FormRoute;
   '/login': typeof LoginRoute;
 }
 
@@ -97,30 +81,27 @@ export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
-  '/form': typeof FormRoute;
   '/login': typeof LoginRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/about' | '/form' | '/login';
+  fullPaths: '/' | '/about' | '/login';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/about' | '/form' | '/login';
-  id: '__root__' | '/' | '/about' | '/form' | '/login';
+  to: '/' | '/about' | '/login';
+  id: '__root__' | '/' | '/about' | '/login';
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   AboutRoute: typeof AboutRoute;
-  FormRoute: typeof FormRoute;
   LoginRoute: typeof LoginRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  FormRoute: FormRoute,
   LoginRoute: LoginRoute,
 };
 
@@ -136,7 +117,6 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/form",
         "/login"
       ]
     },
@@ -145,9 +125,6 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
-    },
-    "/form": {
-      "filePath": "form.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
