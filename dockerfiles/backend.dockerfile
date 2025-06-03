@@ -2,11 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /usr/interact-backend
 
-COPY package*.json ./
+COPY apps/backend/package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY apps/backend/ ./
 
 EXPOSE 8080
 
