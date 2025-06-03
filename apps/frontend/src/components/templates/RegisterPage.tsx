@@ -34,8 +34,7 @@ export const RegisterPage = () => {
     },
     onSubmit: async ({ value }) => {
       registerMutation.mutate(value, {
-        onSuccess: (data) => {
-          console.log('Inscription réussie :', data);
+        onSuccess: () => {
           navigate({ to: '/login' });
         },
         onError: (error) => {

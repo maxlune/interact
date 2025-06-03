@@ -7,7 +7,7 @@ const RootComponent = () => {
     <>
       <Navbar />
       <Outlet />
-      {process.env.NODE_ENV !== 'production' && <TanStackRouterDevtools />}
+      {import.meta.env.DEV && <TanStackRouterDevtools />}
     </>
   );
 };

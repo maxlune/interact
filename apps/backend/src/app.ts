@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    // TODO put front url here
+    // TODO Need to put front url here?
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
@@ -41,11 +41,6 @@ app.use(router);
 app.get('/', function (req: Request, res: Response) {
   res.send('Hello from backend');
 });
-
-// app.use((err: Error, req: Request, res: Response) => {
-//   console.error(err.stack);
-//   res.status(500).json({ error: err.message || 'Une erreur est survenue' });
-// });
 
 app.use(errorHandler);
 
