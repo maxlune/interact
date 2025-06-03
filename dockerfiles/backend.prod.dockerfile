@@ -1,17 +1,15 @@
-# Multi-stage build pour TypeScript
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY apps/backend/package*.json ./
 
 RUN npm ci
 
-COPY . .
+COPY apps/backend/ ./
 
 RUN npx tsc --project tsconfig.prod.json
 
-# Stage de production
 FROM node:18-alpine AS production
 
 RUN addgroup -g 1001 -S nodejs
@@ -19,15 +17,12 @@ RUN adduser -S interact -u 1001 -G nodejs
 
 WORKDIR /usr/interact-backend
 
-COPY --chown=interact:nodejs package*.json ./
+COPY --chown=interact:nodejs apps/backend/package*.json ./
 
 RUN npm ci && npm cache clean --force
 
 COPY --from=builder --chown=interact:nodejs /app/dist ./dist
 COPY --from=builder --chown=interact:nodejs /app/src ./src
-
-# Copier les autres fichiers si nécessaires
-# COPY --from=builder /app/public ./public
 
 USER interact
 
