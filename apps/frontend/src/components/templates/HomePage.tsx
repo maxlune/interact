@@ -3,6 +3,7 @@ export const HomePage = () => {
     <>
       <h1 className="text-red-500">Hello World</h1>
       <p style={{ color: 'var(--test-var-color)' }}>Hello</p>
+      <p>Test</p>
     </>
   );
 };
