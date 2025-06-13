@@ -15,8 +15,8 @@ export const requireRole = (allowedRoles: UserRole[]) => {
       const { UserRepository } = await import(
         '../../repositories/user.repository'
       );
-      const userRepo = new UserRepository();
 
+      const userRepo = new UserRepository();
       const user = await userRepo.getUserById(req.user.userId, {
         id: true,
         role: true,
@@ -30,7 +30,7 @@ export const requireRole = (allowedRoles: UserRole[]) => {
       if (!allowedRoles.includes(user.role as UserRole)) {
         response(res, {
           statusCode: 403,
-          message: `Access forbidden. Required roles: ${allowedRoles.join(', ')}`,
+          message: `Access forbidden.`,
         });
         return;
       }
