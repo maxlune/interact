@@ -75,6 +75,7 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
       message: 'User created successfully',
       data: {
         username: result.username,
+        role: result.role,
       },
     });
   } catch (error) {

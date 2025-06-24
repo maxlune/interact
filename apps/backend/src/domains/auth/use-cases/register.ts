@@ -6,6 +6,7 @@ import { RegisterData } from '../entities/auth.entity';
 
 export interface RegisterResult {
   username: string;
+  role: UserRole;
 }
 
 export class Register {
@@ -32,12 +33,12 @@ export class Register {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    await this.userRepository.createUser({
+    const newUser = await this.userRepository.createUser({
       username,
       password: hashedPassword,
       role: UserRole.SPECTATOR,
     });
 
-    return { username };
+    return { username: newUser.username, role: newUser.role as UserRole };
   }
 }

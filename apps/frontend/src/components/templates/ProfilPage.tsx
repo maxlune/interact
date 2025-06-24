@@ -3,7 +3,7 @@ import { useAuthStore } from '../../stores/authStore.ts';
 
 export const ProfilPage = () => {
   const { user, isAuthenticated } = useAuthStore();
-  const { data, isLoading, isError } = useCheckAuth();
+  const { isLoading, isError } = useCheckAuth();
 
   if (!isAuthenticated) {
     return (
@@ -37,7 +37,8 @@ export const ProfilPage = () => {
       <h1>Mon Profil</h1>
 
       <div>
-        <p>Nom d'utilisateur : {user?.username || data?.data?.username}</p>
+        <p>Nom d'utilisateur : {user?.username}</p>
+        <p>Nom d'utilisateur : {user?.role}</p>
       </div>
     </>
   );
