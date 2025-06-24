@@ -40,6 +40,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
       data: {
         userId: result.user.userId,
         name: result.user.username,
+        role: result.user.role,
       },
     });
   } catch (error) {
@@ -72,7 +73,9 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
     response(res, {
       statusCode: 201,
       message: 'User created successfully',
-      data: { username: result.username },
+      data: {
+        username: result.username,
+      },
     });
   } catch (error) {
     if (error instanceof Error) {

@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import { UserRepository } from '../../../repositories/user.repository';
+import { UserRole } from '../../../types/users/user-roles';
 import { RegisterData } from '../entities/auth.entity';
 
 export interface RegisterResult {
@@ -34,6 +35,7 @@ export class Register {
     await this.userRepository.createUser({
       username,
       password: hashedPassword,
+      role: UserRole.SPECTATOR,
     });
 
     return { username };
