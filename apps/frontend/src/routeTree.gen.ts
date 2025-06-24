@@ -12,12 +12,21 @@
 
 import { Route as rootRoute } from './routes/__root';
 import { Route as AboutImport } from './routes/about';
+import { Route as AdminImport } from './routes/admin';
+import { Route as DashboardImport } from './routes/dashboard';
 import { Route as IndexImport } from './routes/index';
 import { Route as LoginImport } from './routes/login';
 import { Route as ProfilImport } from './routes/profil';
 import { Route as RegisterImport } from './routes/register';
+import { Route as ShowsImport } from './routes/shows';
 
 // Create/Update Routes
+
+const ShowsRoute = ShowsImport.update({
+  id: '/shows',
+  path: '/shows',
+  getParentRoute: () => rootRoute,
+} as any);
 
 const RegisterRoute = RegisterImport.update({
   id: '/register',
@@ -34,6 +43,18 @@ const ProfilRoute = ProfilImport.update({
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const AdminRoute = AdminImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -67,6 +88,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport;
       parentRoute: typeof rootRoute;
     };
+    '/admin': {
+      id: '/admin';
+      path: '/admin';
+      fullPath: '/admin';
+      preLoaderRoute: typeof AdminImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/dashboard': {
+      id: '/dashboard';
+      path: '/dashboard';
+      fullPath: '/dashboard';
+      preLoaderRoute: typeof DashboardImport;
+      parentRoute: typeof rootRoute;
+    };
     '/login': {
       id: '/login';
       path: '/login';
@@ -88,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport;
       parentRoute: typeof rootRoute;
     };
+    '/shows': {
+      id: '/shows';
+      path: '/shows';
+      fullPath: '/shows';
+      preLoaderRoute: typeof ShowsImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -96,51 +138,91 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
+  '/admin': typeof AdminRoute;
+  '/dashboard': typeof DashboardRoute;
   '/login': typeof LoginRoute;
   '/profil': typeof ProfilRoute;
   '/register': typeof RegisterRoute;
+  '/shows': typeof ShowsRoute;
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
+  '/admin': typeof AdminRoute;
+  '/dashboard': typeof DashboardRoute;
   '/login': typeof LoginRoute;
   '/profil': typeof ProfilRoute;
   '/register': typeof RegisterRoute;
+  '/shows': typeof ShowsRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexRoute;
   '/about': typeof AboutRoute;
+  '/admin': typeof AdminRoute;
+  '/dashboard': typeof DashboardRoute;
   '/login': typeof LoginRoute;
   '/profil': typeof ProfilRoute;
   '/register': typeof RegisterRoute;
+  '/shows': typeof ShowsRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/about' | '/login' | '/profil' | '/register';
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/dashboard'
+    | '/login'
+    | '/profil'
+    | '/register'
+    | '/shows';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/about' | '/login' | '/profil' | '/register';
-  id: '__root__' | '/' | '/about' | '/login' | '/profil' | '/register';
+  to:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/dashboard'
+    | '/login'
+    | '/profil'
+    | '/register'
+    | '/shows';
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/dashboard'
+    | '/login'
+    | '/profil'
+    | '/register'
+    | '/shows';
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   AboutRoute: typeof AboutRoute;
+  AdminRoute: typeof AdminRoute;
+  DashboardRoute: typeof DashboardRoute;
   LoginRoute: typeof LoginRoute;
   ProfilRoute: typeof ProfilRoute;
   RegisterRoute: typeof RegisterRoute;
+  ShowsRoute: typeof ShowsRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRoute,
+  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   ProfilRoute: ProfilRoute,
   RegisterRoute: RegisterRoute,
+  ShowsRoute: ShowsRoute,
 };
 
 export const routeTree = rootRoute
@@ -155,9 +237,12 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/admin",
+        "/dashboard",
         "/login",
         "/profil",
-        "/register"
+        "/register",
+        "/shows"
       ]
     },
     "/": {
@@ -165,6 +250,12 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/admin": {
+      "filePath": "admin.tsx"
+    },
+    "/dashboard": {
+      "filePath": "dashboard.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
@@ -174,6 +265,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/shows": {
+      "filePath": "shows.tsx"
     }
   }
 }
