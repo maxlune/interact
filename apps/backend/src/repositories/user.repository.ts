@@ -23,6 +23,21 @@ export class UserRepository {
     }
   }
 
+  async getAllUsersWithRole(): Promise<Partial<User>[]> {
+    try {
+      return db.query.users.findMany({
+        columns: {
+          id: true,
+          username: true,
+          role: true,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      throw new Error('Failed to retrieve users');
+    }
+  }
+
   getUserById(
     id: string,
     columns: UserColumns,

@@ -18,6 +18,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
       setUser({
         id: data.userId,
         username: data.username,
+        role: data.role,
       });
       toggleAuth(true);
     }

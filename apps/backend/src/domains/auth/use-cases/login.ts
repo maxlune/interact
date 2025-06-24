@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import { UserRepository } from '../../../repositories/user.repository';
+import { UserRole } from '../../../types/users/user-roles';
 import {
   AuthTokens,
   AuthUser,
@@ -24,6 +25,7 @@ export class Login {
       id: true,
       username: true,
       password: true,
+      role: true,
     });
 
     if (!user) {
@@ -48,6 +50,7 @@ export class Login {
       user: {
         userId: user.id as string,
         username: user.username as string,
+        role: user.role as UserRole,
       },
       tokens: {
         accessToken,

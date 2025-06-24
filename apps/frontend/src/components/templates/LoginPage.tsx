@@ -32,6 +32,7 @@ export const LoginPage = () => {
             setUser({
               id: data.data.userId,
               username: data.data.name,
+              role: data.data.role,
             });
             toggleAuth(true);
           }

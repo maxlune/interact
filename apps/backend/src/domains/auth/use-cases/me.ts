@@ -8,6 +8,7 @@ export class Me {
     const user = await this.userRepository.getUserById(userId, {
       id: true,
       username: true,
+      role: true,
     });
 
     if (!user) {
@@ -17,6 +18,8 @@ export class Me {
     return {
       userId: user.id!,
       username: user.username!,
+      role: user.role!,
+      // role: user.role! as UserRole,
     };
   }
 }
