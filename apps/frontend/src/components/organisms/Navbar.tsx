@@ -163,7 +163,12 @@ export const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>
+      {/*<div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>*/}
+      <div
+        className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+          isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-2 border-gray-300">
           {/* Mobile Navigation Links */}
           <Link
@@ -206,7 +211,7 @@ export const Navbar = () => {
             {isAuthenticated ? (
               <div className="space-y-3">
                 <div className="px-3 py-2">
-                  <div className="text-base font-medium text-white flex items-center gap-2">
+                  <div className="text-base font-medium text-white flex items-center justify-center gap-2">
                     {user?.username}
                     {getRoleBadge()}
                   </div>
@@ -224,7 +229,7 @@ export const Navbar = () => {
                 <button
                   onClick={handleLogout}
                   disabled={logoutMutation.isPending}
-                  className={`w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                  className={`w-full text-center px-3 py-2 rounded-md text-base font-medium transition-colors ${
                     logoutMutation.isPending
                       ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white'
