@@ -163,7 +163,6 @@ export const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      {/*<div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'}`}>*/}
       <div
         className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
           isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
