@@ -77,8 +77,8 @@ services:
     environment:
       - VITE_API_URL=${VITE_API_URL}
     volumes:
-      - ./apps/frontend:/usr/interact-frontend
       - /usr/interact-frontend/node_modules
+      - ./apps/frontend:/usr/interact-frontend
     depends_on:
       - backend
     command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
