@@ -11,6 +11,7 @@ import { errorHandler } from './infrastructure/middleware/errorHandler';
 import { refreshTokenMiddleware } from './infrastructure/middleware/refreshToken';
 import { requestLogger } from './infrastructure/middleware/requestLogger';
 import router from './routes';
+import { initializeSocketServer } from './sockets/server';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const { PORT } = env;
 
 const app = express();
 const server = http.createServer(app);
+initializeSocketServer(server);
 
 app.use(cookieParser());
 app.use(express.json());
