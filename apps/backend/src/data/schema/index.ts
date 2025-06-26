@@ -1,7 +1,17 @@
-import { answers } from './answers';
-import { questions } from './questions';
+import { answerRelations, answers } from './answers';
+import { questionRelations, questions } from './questions';
 import { results } from './results';
-import { users } from './users';
-import { votes } from './votes';
+import { userRelations, users } from './users';
+import { voteRelations, votes } from './votes';
 
-export { answers, questions, results, users, votes };
+export {
+  answerRelations,
+  answers,
+  questionRelations,
+  questions,
+  results,
+  userRelations,
+  users,
+  voteRelations,
+  votes,
+};

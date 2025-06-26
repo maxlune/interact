@@ -1,6 +1,8 @@
+import { relations } from 'drizzle-orm';
 import { pgEnum, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { questions } from './questions';
+import { results } from './results';
 import { users } from './users';
 
 export const voteStatusEnum = pgEnum('vote_status', [
@@ -24,3 +26,15 @@ export const votes = pgTable('votes', {
   closedAt: timestamp('closed_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const voteRelations = relations(votes, ({ one, many }) => ({
+  question: one(questions, {
+    fields: [votes.questionId],
+    references: [questions.id],
+  }),
+  creator: one(users, {
+    fields: [votes.createdBy],
+    references: [users.id],
+  }),
+  results: many(results),
+}));
