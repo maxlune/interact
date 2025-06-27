@@ -1,8 +1,12 @@
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
-import { VoteUseCases } from '../use-cases/vote';
+import { GetActiveVotes } from '../use-cases/get-active-votes';
+import { GetVoteResults } from '../use-cases/get-vote-results';
+import { ParticipateVote } from '../use-cases/participate-vote';
 
-const voteUseCases = new VoteUseCases();
+const participateVoteUseCase = new ParticipateVote();
+const getActiveVotesUseCase = new GetActiveVotes();
+const getVoteResultsUseCase = new GetVoteResults();
 
 export const joinShow = async (
   socket: Socket,
@@ -10,22 +14,28 @@ export const joinShow = async (
   // userId: string,
 ) => {
   try {
-    const activeVotes = await voteUseCases.getActiveVotesByShow(showId);
-
     const roomName = `show:${showId}`;
     socket.join(roomName);
 
-    socket.emit('activeVotes', activeVotes);
+    // const activeVotes = await voteUseCases.getActiveVotesUseCaseByShow(showId);
+    const activeVotes = await getActiveVotesUseCase.execute(showId);
 
-    socket.emit('vote:notification', {
-      type: 'success',
-      message: `Vous participez maintenant au spectacle ${showId}`,
+    socket.emit('vote:activeVotes', activeVotes);
+
+    // socket.emit('vote:notification', {
+    //   type: 'success',
+    //   message: `Vous participez maintenant au spectacle ${showId}`,
+    // });
+
+    socket.emit('vote:joinedShow', {
+      showId,
+      message: `Connecté au spectacle ${showId}`,
     });
 
     console.info(`${socket.id} joined ${roomName}`);
   } catch (error) {
     console.error(error);
-    socket.emit('error', 'Impossible de rejoindre le spectacle');
+    socket.emit('vote:error', 'Impossible de rejoindre le spectacle');
   }
 };
 
@@ -38,45 +48,74 @@ export const leaveShow = async (
     const roomName = `show:${showId}`;
     socket.leave(roomName);
 
-    socket.emit('vote:notification', {
-      type: 'info',
-      message: `Vous avez quitté le spectacle ${showId}`,
+    // socket.emit('vote:notification', {
+    //   type: 'info',
+    //   message: `Vous avez quitté le spectacle ${showId}`,
+    // });
+
+    socket.emit('vote:leftShow', {
+      showId,
+      message: `Déconnecté du spectacle ${showId}`,
     });
 
     console.info(`${socket.id} left ${roomName}`);
   } catch (error) {
     console.error(error);
-    socket.emit('error', 'Impossible de quitter le spectacle');
+    socket.emit('vote:error', 'Impossible de quitter le spectacle');
   }
 };
 
 export const participateVote = async (
   socket: Socket,
-  data: { voteId: string; answerId: string; roomId: string },
+  io: Server,
+  data: { voteId: string; answerId: string; showId: string },
   userId: string,
 ) => {
   try {
-    const result = await voteUseCases.participateInVote({
+    await participateVoteUseCase.execute({
       voteId: data.voteId,
       answerId: data.answerId,
       userId: userId,
     });
 
-    if (!result.success) {
-      throw new Error("Impossible d'enregistrer le vote");
-    }
+    const results = await getVoteResultsUseCase.execute(data.voteId);
 
-    socket.to(data.roomId).emit('voteUpdated', {
+    const roomName = `show:${data.showId}`;
+    io.to(roomName).emit('vote:resultsUpdated', {
       voteId: data.voteId,
-      message: 'Nouveaux votes enregistrés',
+      results: results,
     });
 
-    socket.emit('vote:notification', {
-      type: 'success',
+    socket.emit('vote:voteConfirmed', {
       message: 'Votre vote a été enregistré !',
     });
   } catch (error) {
     console.error(error);
-    socket.emit('error', 'Impossible de participer au vote');
+    socket.emit(
+      'vote:error',
+      error instanceof Error ? error.message : 'Impossible de voter',
+    );
   }
+};
+
+export const broadcastVoteStarted = (
+  io: Server,
+  showId: string,
+  voteData: any,
+) => {
+  const roomName = `show:${showId}`;
+  io.to(roomName).emit('vote:started', voteData);
+};
+
+export const broadcastVoteClosed = (
+  io: Server,
+  showId: string,
+  voteId: string,
+  finalResults: any,
+) => {
+  const roomName = `show:${showId}`;
+  io.to(roomName).emit('vote:closed', {
+    voteId,
+    finalResults,
+  });
 };

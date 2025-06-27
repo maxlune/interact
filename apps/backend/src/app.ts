@@ -7,6 +7,7 @@ import express, { Request, Response } from 'express';
 import helmet from 'helmet';
 
 import env from './config/env';
+import { setSocketIO } from './domains/vote/controllers/vote.controller';
 import { errorHandler } from './infrastructure/middleware/errorHandler';
 import { refreshTokenMiddleware } from './infrastructure/middleware/refreshToken';
 import { requestLogger } from './infrastructure/middleware/requestLogger';
@@ -19,7 +20,8 @@ const { PORT } = env;
 
 const app = express();
 const server = http.createServer(app);
-initializeSocketServer(server);
+const io = initializeSocketServer(server);
+setSocketIO(io);
 
 app.use(cookieParser());
 app.use(express.json());

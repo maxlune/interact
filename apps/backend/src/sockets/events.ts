@@ -17,17 +17,17 @@ export function setupSocketEvent(io: Server) {
     console.info(`${socket.id} connected`);
 
     socket.on('vote:join-show', (showId: string) => {
-      joinShow(socket, showId, userId);
+      joinShow(socket, showId);
     });
 
     socket.on('vote:leave-show', (showId: string) => {
-      leaveShow(socket, showId, userId);
+      leaveShow(socket, showId);
     });
 
     socket.on(
       'vote:participate',
-      (data: { voteId: string; answerId: string; roomId: string }) => {
-        participateVote(socket, data, userId);
+      (data: { voteId: string; answerId: string; showId: string }) => {
+        participateVote(socket, io, data, userId);
       },
     );
 
