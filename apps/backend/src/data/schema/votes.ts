@@ -3,6 +3,7 @@ import { pgEnum, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 import { questions } from './questions';
 import { results } from './results';
+import { shows } from './shows';
 import { users } from './users';
 
 export const voteStatusEnum = pgEnum('vote_status', [
@@ -16,8 +17,9 @@ export const votes = pgTable('votes', {
   questionId: uuid('question_id')
     .notNull()
     .references(() => questions.id, { onDelete: 'cascade' }),
-  // TODO FK vers shows
-  showId: uuid('show_id').notNull(),
+  showId: uuid('show_id')
+    .notNull()
+    .references(() => shows.id, { onDelete: 'cascade' }),
   createdBy: uuid('created_by')
     .notNull()
     .references(() => users.id),
@@ -31,6 +33,10 @@ export const voteRelations = relations(votes, ({ one, many }) => ({
   question: one(questions, {
     fields: [votes.questionId],
     references: [questions.id],
+  }),
+  show: one(shows, {
+    fields: [votes.showId],
+    references: [shows.id],
   }),
   creator: one(users, {
     fields: [votes.createdBy],
