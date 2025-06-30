@@ -1,6 +1,6 @@
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useLogout } from '../../hooks/useLogout.ts';
 import { useRoleCheck } from '../../hooks/useRoleCheck.ts';
@@ -9,7 +9,6 @@ import { useAuthStore } from '../../stores/authStore.ts';
 export const Navbar = () => {
   const { isAuthenticated, user, setUser, toggleAuth } = useAuthStore();
   const { isAdmin, canManageShows } = useRoleCheck();
-  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const logoutMutation = useLogout();
@@ -18,8 +17,8 @@ export const Navbar = () => {
     logoutMutation.mutateAsync().then(() => {
       setUser(null);
       toggleAuth(false);
-      navigate({ to: '/' });
-      setIsMobileMenuOpen(false); // Fermer le menu mobile après logout
+      window.location.href = '/';
+      setIsMobileMenuOpen(false);
     });
   };
 
