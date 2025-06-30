@@ -11,6 +11,7 @@ const env: EnvConfig = {
   NODE_ENV:
     (process.env.NODE_ENV as 'development' | 'test' | 'production') ||
     'development',
+  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
   JWT_SECRET: process.env.JWT_SECRET || 'dev-jwt-secret',
   REFRESH_SECRET: process.env.REFRESH_SECRET || 'dev-refresh-secret',
   DATABASE_URL:
