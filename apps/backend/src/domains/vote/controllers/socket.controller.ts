@@ -17,15 +17,21 @@ export const joinShow = async (
     const roomName = `show:${showId}`;
     socket.join(roomName);
 
-    // const activeVotes = await voteUseCases.getActiveVotesUseCaseByShow(showId);
     const activeVotes = await getActiveVotesUseCase.execute(showId);
 
     socket.emit('vote:activeVotes', activeVotes);
 
-    // socket.emit('vote:notification', {
-    //   type: 'success',
-    //   message: `Vous participez maintenant au spectacle ${showId}`,
-    // });
+    for (const vote of activeVotes) {
+      try {
+        const results = await getVoteResultsUseCase.execute(vote.id);
+        socket.emit('vote:resultsUpdated', {
+          voteId: vote.id,
+          results: results,
+        });
+      } catch (error) {
+        console.log(`Pas de résultats pour vote ${vote.id}:`, error);
+      }
+    }
 
     socket.emit('vote:joinedShow', {
       showId,
@@ -47,11 +53,6 @@ export const leaveShow = async (
   try {
     const roomName = `show:${showId}`;
     socket.leave(roomName);
-
-    // socket.emit('vote:notification', {
-    //   type: 'info',
-    //   message: `Vous avez quitté le spectacle ${showId}`,
-    // });
 
     socket.emit('vote:leftShow', {
       showId,
