@@ -31,6 +31,7 @@ export class Register {
       throw new Error('Username already exists');
     }
 
+    // Utiliser const salt = await bcrypt.genSalt(10); ici au lieu de 12
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const newUser = await this.userRepository.createUser({

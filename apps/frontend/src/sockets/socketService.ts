@@ -31,12 +31,12 @@ class SocketService {
     this.socket?.emit('vote:participate', { voteId, answerId, showId });
   }
 
-  onActiveVotes(callback: (votes: IVote[]) => void) {
+  activeVotes(callback: (votes: IVote[]) => void) {
     this.socket?.on('vote:activeVotes', callback);
     return () => this.socket?.off('vote:activeVotes', callback);
   }
 
-  onResultsUpdated(
+  resultsUpdated(
     callback: (data: { voteId: string; results: IVoteResult[] }) => void,
   ) {
     this.socket?.on('vote:resultsUpdated', (data) => {

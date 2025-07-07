@@ -33,8 +33,7 @@ export class CloseVote {
 
     const updatedVote = await this.voteRepository.closeVote(voteId);
 
-    const finalResults =
-      await this.resultRepository.getVoteResultsWithSQL(voteId);
+    const finalResults = await this.resultRepository.getVoteResults(voteId);
 
     return {
       id: updatedVote.id,

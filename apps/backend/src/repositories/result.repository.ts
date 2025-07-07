@@ -30,16 +30,16 @@ export class ResultRepository {
   }
 
   // Rquête d'aggrégation : résultats d'un vote
-  async getVoteResultsWithSQL(voteId: string) {
+  async getVoteResults(voteId: string) {
     const sqlQuery = sql`
         SELECT
             a.id as answer_id,
             a.content as answer_content,
             COUNT(r.id) as vote_count,
             ROUND(
-                    COUNT(r.id) * 100.0 /
-                    NULLIF((SELECT COUNT(*) FROM results WHERE vote_id = ${voteId}), 0),
-                    2
+              COUNT(r.id) * 100.0 /
+              NULLIF((SELECT COUNT(*) FROM results WHERE vote_id = ${voteId}), 0),
+              2
             ) as percentage
         FROM answers a
                  LEFT JOIN results r ON a.id = r.answer_id AND r.vote_id = ${voteId}

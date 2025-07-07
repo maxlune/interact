@@ -17,11 +17,11 @@ export const useVote = (showId: string) => {
 
     socketService.joinShow(showId);
 
-    const cleanupActiveVotes = socketService.onActiveVotes((votes) => {
+    const cleanupActiveVotes = socketService.activeVotes((votes) => {
       store.setActiveVotes(votes);
     });
 
-    const cleanupResults = socketService.onResultsUpdated(
+    const cleanupResults = socketService.resultsUpdated(
       ({ voteId, results }) => {
         store.setResults(voteId, results);
       },

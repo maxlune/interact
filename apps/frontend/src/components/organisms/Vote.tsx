@@ -1,7 +1,7 @@
 import { useVote } from '../../hooks/useVote.ts';
 
 export const Vote = ({
-  showId = 'af168a42-ef71-449a-9ae0-75f46184aa9f',
+  showId = '1435c53c-0aa5-4a61-a5f2-5bd1058121c0',
 }: {
   showId: string;
 }) => {
