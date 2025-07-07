@@ -12,7 +12,7 @@ export class GetVoteResults {
       throw new Error('Vote introuvable');
     }
 
-    const results = await this.resultRepository.getVoteResultsWithSQL(voteId);
+    const results = await this.resultRepository.getVoteResults(voteId);
 
     return {
       voteId: vote.id,
