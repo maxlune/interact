@@ -8,12 +8,16 @@ describe('User Entity', () => {
       id: '1',
       username: 'john',
       password: 'password',
+      role: 'spectator',
+      refreshToken: null,
     };
 
     expect(user).toEqual({
       id: '1',
       username: 'john',
       password: 'password',
+      role: 'spectator',
+      refreshToken: null,
     });
   });
 
